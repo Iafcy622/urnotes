@@ -1,17 +1,33 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Pencil2Icon,
-  HomeIcon,
-  GearIcon,
-  MagnifyingGlassIcon,
-} from "@radix-ui/react-icons";
+import { Pencil2Icon, HomeIcon } from "@radix-ui/react-icons";
 import { ModeToggle } from "@/components/dashboard/darkmode-toggle";
 import { Settings } from "@/components/dashboard/settings";
+import { Search } from "@/components/dashboard/search";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 export function Sidebar({ className }: { className: String }) {
-  const notes = ["Note 1", "Note 2", "Note 3", "Note 4"];
+  const pathname = usePathname();
+
+  const notes = [
+    {
+      id: 1,
+      title: "Note 1",
+    },
+    {
+      id: 2,
+      title: "Note 2",
+    },
+    {
+      id: 3,
+      title: "Note 3",
+    },
+  ];
 
   return (
     <div className={cn("pb-12", className)}>
@@ -24,15 +40,19 @@ export function Sidebar({ className }: { className: String }) {
             </div>
           </h2>
           <div className="space-y-1">
-            <Button variant="secondary" className="w-full justify-start">
-              <HomeIcon className="mr-2 h-4 w-4" />
-              Home
-            </Button>
+            <Link href="/dashboard" passHref>
+              <Button
+                variant="ghost"
+                className={clsx("w-full justify-start", {
+                  "bg-primary-foreground": pathname == "/dashboard",
+                })}
+              >
+                <HomeIcon className="mr-2 h-4 w-4" />
+                Home
+              </Button>
+            </Link>
             <Settings />
-            <Button variant="ghost" className="w-full justify-start">
-              <MagnifyingGlassIcon className="mr-2 h-4 w-4" />
-              Search
-            </Button>
+            <Search />
           </div>
         </div>
 
@@ -42,15 +62,23 @@ export function Sidebar({ className }: { className: String }) {
           </h2>
           <ScrollArea className="h-[300px] px-1">
             <div className="space-y-1 p-2">
-              {notes?.map((playlist, i) => (
-                <Button
-                  key={`${notes}-${i}`}
-                  variant="ghost"
-                  className="w-full justify-start font-normal"
+              {notes?.map((note) => (
+                <Link
+                  key={note.id}
+                  href={`/dashboard/notes/${note.id}`}
+                  passHref
                 >
-                  <Pencil2Icon className="mr-2 h-4 w-4" />
-                  {playlist}
-                </Button>
+                  <Button
+                    variant="ghost"
+                    className={clsx("w-full justify-start font-normal", {
+                      "bg-primary-foreground":
+                        pathname == `/dashboard/notes/${note.id}`,
+                    })}
+                  >
+                    <Pencil2Icon className="mr-2 h-4 w-4" />
+                    {note.title}
+                  </Button>
+                </Link>
               ))}
             </div>
           </ScrollArea>
