@@ -10,24 +10,12 @@ import { Search } from "@/components/dashboard/search";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { fetchNotes } from "@/lib/data";
 
 export function Sidebar({ className }: { className: String }) {
   const pathname = usePathname();
 
-  const notes = [
-    {
-      id: 1,
-      title: "Note 1",
-    },
-    {
-      id: 2,
-      title: "Note 2",
-    },
-    {
-      id: 3,
-      title: "Note 3",
-    },
-  ];
+  const notes = fetchNotes("111");
 
   return (
     <div className={cn("pb-12", className)}>
